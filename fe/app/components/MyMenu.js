@@ -19,12 +19,12 @@ import { Segment, Menu } from "semantic-ui-react";
 
             return(
                 <Segment inverted>
-                <Menu inverted pointing secondary>
-                    <Menu.Item as={Link} to="/" name='home' active={activeItem === 'home'} onClick={this.handleItemClick.bind(this)}/>
-                    <Menu.Item as={Link} to="/about" name='about' active={activeItem === 'about'} onClick={this.handleItemClick.bind(this)}/>
-                    <Menu.Item as={Link} to="/posts" name='posts' active={activeItem === 'posts'} onClick={this.handleItemClick.bind(this)}/>
-                </Menu>
-            </Segment>
+                    <Menu inverted pointing secondary>
+                        <Menu.Item as={Link} to="/" name='home' active={activeItem === 'home'} onClick={this.handleItemClick.bind(this)}/>
+                        <Menu.Item as={Link} to="/about" name='about' active={activeItem === 'about'} onClick={this.handleItemClick.bind(this)}/>
+                        <Menu.Item as={Link} to="/posts" name='posts' active={activeItem === 'posts'} onClick={this.handleItemClick.bind(this)}/>
+                    </Menu>
+                </Segment>
             )
         }
         

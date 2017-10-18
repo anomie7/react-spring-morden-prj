@@ -1,0 +1,19 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+.home-container{
+    height: 100%;
+}
+.home-segment{
+    height: 600px;
+}
+
+/* .app-container{
+    height: 80%;
+} */
+
+#react{
+    height: 100%;
+}
