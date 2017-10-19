@@ -7,13 +7,15 @@
     height: 100%;
 }
 .home-segment{
-    height: 600px;
+    height:70%;
 }
-
-/* .app-container{
-    height: 80%;
+/* 
+.editor-btn{
+    display: inline-table;
+    float: right;
 } */
 
 #react{
     height: 100%;
 }
+

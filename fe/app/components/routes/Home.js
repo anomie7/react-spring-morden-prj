@@ -2,7 +2,8 @@ import React from 'react';
 import { Header, Container, Segment, Divider } from "semantic-ui-react";
 import Home_Content from "./Home_Content";
 
-const Home = () => {
+const Home = ({history}) => {
+    console.log(history.location)
     return (
         <Container className="home-container">
             <Segment className="home-segment">
