@@ -8,6 +8,7 @@ import Home from "./routes/Home";
 import About from "./routes/About";
 import Posts from "./routes/Posts";
 import NoMatch from "./routes/NoMatch";
+import PostReader from "./routes/PostReader"
 
 function getNowDate(){
     var rightNow = new Date();
@@ -79,7 +80,7 @@ class App extends React.Component{
                     <Route path="/about" component={About}/>
                     <Route exact path="/posts" render = {(props) => <Posts {...props} posts={this.state.posts}/>}/>
                     <Route path="/posts/editor" render = {(props) => <Editor {...props} InsertPost={this._InsertPost.bind(this)}/>} />
-                    <Route path="/posts/:postNum" render = {({match})=> <div>{match.params.postNum} 글</div>}/>
+                    <Route path="/posts/:postNum" render = {(props)=> <PostReader {...props} posts={this.state.posts}/>}/>
                     <Route component={NoMatch}/>
                 </Switch>
             <Segment>footer</Segment>

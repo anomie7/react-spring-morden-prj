@@ -3,9 +3,18 @@ import { Container, Segment, Item } from "semantic-ui-react";
 
 
 class Post extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
+    handleClick(){
+        // console.log(this.props.postKey);
+        this.props.goPost(this.props.postKey);
+    }
+
     render(){
         return (
-            <Segment>
+            <Segment onClick={this.handleClick.bind(this)}>
                 <Item>
                     <Item.Content>
                         <Item.Header>{this.props.subject}</Item.Header>
