@@ -1,33 +1,51 @@
 import React from "react";
-import { Container, Segment, Header, Divider } from "semantic-ui-react";
+import { Container, Segment, Header, Divider, Button } from "semantic-ui-react";
 
 class PostReader extends React.Component{
     constructor(props){
         super(props);
-        this.state = {
-            post: this.props.posts[this.props.match.params.postNum]
+        this.postNum = this.props.match.params.postNum;
+        this.history = this.props.history
+        this.post = {
+            subject: this.props.posts[this.postNum].subject,
+            writer: this.props.posts[this.postNum].writer,
+            content: this.props.posts[this.postNum].content,
+            category: this.props.posts[this.postNum].category,
+            
         }
-        console.log(this.state.post);
+        console.log(this.post);
+    }
+
+    handleClick(){
+        this.history.goBack();
+    }
+
+    deletePost(){
+        var postNum = this.postNum;
+        this.props.deletePost(postNum, this.history);
+    }
+
+    updatePost(){
+        this.props.updatePost(this.post, this.postNum);
+        this.history.push('/ueditor');
     }
 
     render(){
-        var postNum = this.props.match.params.postNum;
-        var subject = this.state.post.subject;
-        var writer = this.state.post.createDate;
-        var content = this.state.post.content;
-        var category = this.state.post.category;
         return (
             <Container className="home-container">
                 <Segment className="home-segment">
-                    <Header as="h2" content= {postNum + " 번째 글"}/>
+                    <Header as="h2" content= {this.postNum + " 번째 글"}/>
                     <Divider section>
                     </Divider>
                     <Segment>
-                        <p>제목: {subject}</p>
-                        <p>카테고리: {category}</p>
-                        <p>작성자: {writer}</p>
-                        <p>본문: {content}</p>
+                        <p>제목: {this.post.subject}</p>
+                        <p>카테고리: {this.post.category}</p>
+                        <p>작성자: {this.post.writer}</p>
+                        <p>본문: {this.post.content}</p>
                     </Segment>
+                    <Button onClick={this.handleClick.bind(this)} basic content="목록"/>
+                    <Button onClick={this.updatePost.bind(this)} basic content="수정"/>
+                    <Button onClick={this.deletePost.bind(this)} basic content="삭제"/>
                 </Segment>
             </Container>
         )

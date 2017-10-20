@@ -8,6 +8,7 @@ import Home from "./routes/Home";
 import About from "./routes/About";
 import Posts from "./routes/Posts";
 import NoMatch from "./routes/NoMatch";
+import UpdateEditor from "./routes/UpdateEditor";
 import PostReader from "./routes/PostReader"
 
 function getNowDate(){
@@ -56,8 +57,16 @@ class App extends React.Component{
                     content: 'ㅁㄴㄹ',
                     category: '맛집'
                 }
-            ]
-        }
+            ],
+            updatePost: {
+                subject: "",
+                writer: "",
+                createDate: "",
+                content: "",
+                category: ""
+            },
+            postNum : -1
+        };
     }
 
     _InsertPost(post){
@@ -70,6 +79,46 @@ class App extends React.Component{
         this.setState(newState);
     }
 
+    _deletePost(key, history){
+        console.log(key);
+        this.setState({
+            posts: update(
+                this.state.posts, 
+                {
+                    $splice: [[key, 1]]
+                }
+            )
+        });
+        history.goBack();
+    }
+
+    _updatePost(post, postNum){
+        this.setState({
+            updatePost: post,
+            postNum: postNum
+        });
+        console.log(this.state.postNum);
+    }
+
+    _modifyPost(post, postNum){
+        console.log(post);
+        console.log(postNum);
+        this.setState({
+            posts: update(
+                this.state.posts,
+                {
+                    [postNum] : {
+                        subject: {$set: post.subject},
+                        writer: {$set: post.writer},
+                        createDate: {$set: post.createDate},
+                        content: {$set: post.content},
+                        category: {$set: post.category}
+                    }
+                }
+            )
+        });
+    }
+
     render(){
         return (
         <Router>
@@ -79,8 +128,17 @@ class App extends React.Component{
                     <Route exact path="/" component={Home}/>
                     <Route path="/about" component={About}/>
                     <Route exact path="/posts" render = {(props) => <Posts {...props} posts={this.state.posts}/>}/>
-                    <Route path="/posts/editor" render = {(props) => <Editor {...props} InsertPost={this._InsertPost.bind(this)}/>} />
-                    <Route path="/posts/:postNum" render = {(props)=> <PostReader {...props} posts={this.state.posts}/>}/>
+                    <Route exact path="/posts/editor" render = {(props) => <Editor {...props} 
+                                                                             InsertPost={this._InsertPost.bind(this)} />} />
+                    <Route exact path="/posts/:postNum" render = {(props)=> <PostReader {...props} 
+                                                                                  posts={this.state.posts} 
+                                                                                  deletePost={this._deletePost.bind(this)}
+                                                                                  updatePost={this._updatePost.bind(this)}/>
+                                                                                }/>
+                    <Route path="/ueditor" render = {(props) => <UpdateEditor post={this.state.updatePost} 
+                                                                              {...props}
+                                                                              postNum = {this.state.postNum}
+                                                                              modifyPost={this._modifyPost.bind(this)} />} />
                     <Route component={NoMatch}/>
                 </Switch>
             <Segment>footer</Segment>
