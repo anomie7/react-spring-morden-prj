@@ -21,9 +21,9 @@ module.exports = {
     port: 3000,
     publicPath: "/assets/",
     contentBase: './tmp',
-    // proxy: {
-    //   "**": "http://localhost:8080"
-    // }
+    proxy: {
+      "**": "http://localhost:8080"
+    }
   },
   module: {
     rules: [{

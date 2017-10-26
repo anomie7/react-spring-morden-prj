@@ -4,11 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import com.modern.be.web.Person;
-import com.modern.be.web.PersonRepository;
 import com.modern.be.web.Post;
 import com.modern.be.web.PostRepository;
 

@@ -10,6 +10,8 @@ import Posts from "./routes/Posts";
 import NoMatch from "./routes/NoMatch";
 import UpdateEditor from "./routes/UpdateEditor";
 import PostReader from "./routes/PostReader"
+import client from "../js/client";
+import follow from "../js/follow"
 
 function getNowDate(){
     var rightNow = new Date();
@@ -22,42 +24,13 @@ function getNowDate(){
     return yyyy + "-" + mm + "-" + dd + " " + hh + ":" + m + ":" + s;
 }
 
+const root = '/api';
 
 class App extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            posts: [
-                {
-                    subject: '날이 많이 춥네요',
-                    writer: '유재석',
-                    createDate: '2017-09-11',
-                    content: 'ㅁㄹㄴㅁㅇㄻㄴㅇㄹ',
-                    category: '홈'
-                    
-                },
-                {
-                    subject: '날이 많이 덥네요',
-                    writer: '강호동',
-                    createDate: '2016-11-22',
-                    content: 'ㅁㄴㅇㄹㄴㅇㄹ',
-                    category: '리뷰'
-                },
-                {
-                    subject: '취직이 되야할텐데',
-                    writer: '강준만',
-                    createDate: '2011-05-21',
-                    content: 'ㅁㄴㅇㄹㄴㅁㅇㄹ',
-                    category: '요리'
-                },
-                {
-                    subject: '컴퓨터다 컴퓨터',
-                    writer: '김재석',
-                    createDate: '2011-02-11',
-                    content: 'ㅁㄴㄹ',
-                    category: '맛집'
-                }
-            ],
+            posts: [],
             updatePost: {
                 subject: "",
                 writer: "",
@@ -65,8 +38,39 @@ class App extends React.Component{
                 content: "",
                 category: ""
             },
-            postNum : -1
+            postNum : -1,
+            pageSize: 2,
+            links: {},
+            attributes: []
         };
+    }
+
+    componentDidMount() {
+      this.loadFromServer(this.state.pageSize);
+    };
+
+
+    loadFromServer(pageSize){
+        follow(client, root, [
+            {rel: 'posts', params: {size: pageSize}}]
+        ).then(postsCollection => {
+            return client({
+                method: 'GET',
+                path: postsCollection.entity._links.profile.href,
+                headers: {'Accept': 'application/schema+json'}
+            }).then(schema => {
+                this.schema = schema.entity;
+                return postsCollection;
+            });
+        }).then(postsCollection => {
+            this.setState({
+                posts: postsCollection.entity._embedded.posts,
+                attributes: Object.keys(this.schema.properties),
+                pageSize: pageSize,
+                links: postsCollection.entity._links
+            });
+            console.log(this.state);
+        });
     }
 
     _InsertPost(post){
