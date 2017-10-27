@@ -6,13 +6,7 @@ class PostReader extends React.Component{
         super(props);
         this.postNum = this.props.match.params.postNum;
         this.history = this.props.history
-        this.post = {
-            subject: this.props.posts[this.postNum].subject,
-            writer: this.props.posts[this.postNum].writer,
-            content: this.props.posts[this.postNum].content,
-            category: this.props.posts[this.postNum].category,
-            
-        }
+        this.post = this.props.posts[this.postNum];
         console.log(this.post);
     }
 
@@ -22,7 +16,7 @@ class PostReader extends React.Component{
 
     deletePost(){
         var postNum = this.postNum;
-        this.props.deletePost(postNum, this.history);
+        this.props.deletePost(postNum, this.history, this.post);
     }
 
     updatePost(){

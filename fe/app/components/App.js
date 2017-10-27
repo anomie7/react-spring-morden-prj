@@ -75,16 +75,48 @@ class App extends React.Component{
 
     _InsertPost(post){
         post['createDate'] = getNowDate();
-        let newState = update(this.state, {
-            posts: {
-                $push: [post]
-            }
-        });
-        this.setState(newState);
+        follow(client, root, ['posts']).then(postsCollection => {
+            return client({
+                method: 'POST',
+                path: postsCollection.entity._links.self.href,
+                entity: post,
+                headers: {'Content-Type': 'application/json'}
+            })
+        }).then(res =>{
+            console.log('post 완료');
+            console.log(res);
+            return follow(client, root, [{
+                rel: 'posts', params: {'size': this.state.pageSize}
+            }]);
+        }).then(res => {
+                client({method: 'GET', path: res.entity._links.self.href}).then(postsCollection =>{
+                    let newState = update(this.state, {
+                        posts: {
+                            $push: [postsCollection.entity._embedded.posts]
+                        }
+                        // attributes: {$push: this.state.attributes},
+                        // pageSize: { $push: this.state.pageSize},
+                        // links:{$push: postsCollection.entity._links}
+                    });
+                    this.setState(newState)
+                    console.log('추가이후 setState start')
+                    console.log(this.state.posts);
+                });
+        })
     }
 
-    _deletePost(key, history){
+    _deletePost(key, history, post){
         console.log(key);
+        console.log(post);
+        console.log(post._links.self.href);
+        client({
+            method: 'DELETE',
+            path: post._links.self.href
+        }).then(res =>{
+            console.log('delete 완료?');
+        })
+
+
         this.setState({
             posts: update(
                 this.state.posts, 
