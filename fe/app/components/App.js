@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import When from 'when';
 import { Container, Segment } from "semantic-ui-react";
 import update from 'react-addons-update';
 import MyMenu from './MyMenu';
@@ -60,20 +61,30 @@ class App extends React.Component{
                 headers: {'Accept': 'application/schema+json'}
             }).then(schema => {
                 this.schema = schema.entity;
+                this.links = postsCollection.entity._links;
                 return postsCollection;
             });
         }).then(postsCollection => {
+            return postsCollection.entity._embedded.posts.map( post => 
+                client({
+                    method: 'GET',
+                    path: post._links.self.href
+                })
+            );
+        }).then(postPromises => {
+            return When.all(postPromises);
+        }).then(posts => {
             this.setState({
-                posts: postsCollection.entity._embedded.posts,
+                posts: posts,
                 attributes: Object.keys(this.schema.properties),
                 pageSize: pageSize,
-                links: postsCollection.entity._links
+                links: this.links
             });
             console.log(this.state);
         });
     }
 
-    _InsertPost(post){
+    _InsertPost(post, history){
         post['createDate'] = getNowDate();
         follow(client, root, ['posts']).then(postsCollection => {
             return client({
@@ -88,32 +99,37 @@ class App extends React.Component{
             return follow(client, root, [{
                 rel: 'posts', params: {'size': this.state.pageSize}
             }]);
-        }).then(res => {
-                client({method: 'GET', path: res.entity._links.self.href}).then(postsCollection =>{
-                    let newState = update(this.state, {
-                        posts: {
-                            $push: [postsCollection.entity._embedded.posts]
-                        }
-                        // attributes: {$push: this.state.attributes},
-                        // pageSize: { $push: this.state.pageSize},
-                        // links:{$push: postsCollection.entity._links}
-                    });
-                    this.setState(newState)
-                    console.log('추가이후 setState start')
-                    console.log(this.state.posts);
-                });
+        }).then(postsCollection => {
+               this.links = postsCollection.entity._links;
+               return postsCollection.entity._embedded.posts.map( post => 
+                client({
+                    method: 'GET',
+                    path: post._links.self.href
+                })
+            )
+        }).then(postPromises => {
+            return When.all(postPromises);
+        }).then(posts => {
+            this.setState({
+                posts: posts,
+                attributes: Object.keys(this.schema.properties),
+                pageSize: this.state.pageSize,
+                links: this.links
+            });
+            console.log(this.state);
+            history.push('/posts')
         })
-    }
+    };
 
     _deletePost(key, history, post){
         console.log(key);
         console.log(post);
-        console.log(post._links.self.href);
+        console.log(post.url);
         client({
             method: 'DELETE',
-            path: post._links.self.href
+            path: post.url
         }).then(res =>{
-            console.log('delete 완료?');
+            console.log('delete 완료');
         })
 
 

@@ -11,6 +11,32 @@ class Posts extends React.Component{
             posts : this.props.posts
         }
         this.history = this.props.history;
+        console.log(this.state.posts);
+    }
+
+    componentWillReceiveProps(nextProps){
+        console.log('Component Will Receive');
+;        console.log(nextProps);
+        this.setState = {
+            posts: nextProps.posts
+        }
+        console.log(this.state);
+    }
+
+    componentWillMount(){
+        console.log('component Will Mount');
+    }
+
+    shouldComponentUpdate(nextProps, nextState){
+        console.log("shouldComponentUpdate: ");
+        console.log(nextProps); //여기서는 방금 insert한 값이 출력됨.
+        console.log(nextState);
+        console.log(this.state);
+        return true;
+    }
+
+    componentDidUpdate(){
+        console.log('Component Did Update');
     }
 
     _goPost(postKey){
@@ -19,6 +45,8 @@ class Posts extends React.Component{
     }
 
     render(){
+        console.log('Posts rendering');
+        console.log(this.state)
         return (
         <Container className="home-container">
         <Segment className="home-segment">
@@ -28,11 +56,11 @@ class Posts extends React.Component{
             <Item.Group>
                 {this.state.posts.map( (post, i) =>{
                     return (<Post 
-                                subject={post.subject}
+                                subject={post.entity.subject}
                                 key ={i}
                                 postKey = {i} 
-                                category = {post.category} 
-                                createDate = {post.createDate} 
+                                category = {post.entity.category} 
+                                createDate = {post.entity.createDate} 
                                 goPost = {this._goPost.bind(this)}/>)
                 })}
             <Divider>

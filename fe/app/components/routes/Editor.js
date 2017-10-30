@@ -26,9 +26,10 @@ class Editor extends React.Component{
         console.log(this.state);
     }
 
-    handleSubmit(){
-        this.props.InsertPost(this.state);
-        this.props.history.push('/posts');
+    handleSubmit(e){
+        e.preventDefault();
+        this.props.InsertPost(this.state, this.props.history);
+        // this.props.history.push('/posts');
     }
 
     render(){

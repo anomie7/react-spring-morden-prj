@@ -32,10 +32,10 @@ class PostReader extends React.Component{
                     <Divider section>
                     </Divider>
                     <Segment>
-                        <p>제목: {this.post.subject}</p>
-                        <p>카테고리: {this.post.category}</p>
-                        <p>작성자: {this.post.writer}</p>
-                        <p>본문: {this.post.content}</p>
+                        <p>제목: {this.post.entity.subject}</p>
+                        <p>카테고리: {this.post.entity.category}</p>
+                        <p>작성자: {this.post.entity.writer}</p>
+                        <p>본문: {this.post.entity.content}</p>
                     </Segment>
                     <Button onClick={this.handleClick.bind(this)} basic content="목록"/>
                     <Button onClick={this.updatePost.bind(this)} basic content="수정"/>

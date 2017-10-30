@@ -7,6 +7,8 @@ class Post extends React.Component{
         super(props);
     }
 
+    
+
     handleClick(){
         // console.log(this.props.postKey);
         this.props.goPost(this.props.postKey);
