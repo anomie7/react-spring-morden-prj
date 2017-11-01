@@ -1,4 +1,4 @@
-Morden SPA Blog
+Morden SPA Blog(ing)
 ==========================
 ## Start
 1. cd /parent  
