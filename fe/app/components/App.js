@@ -121,7 +121,6 @@ class App extends React.Component{
                 pageSize: this.state.pageSize,
                 links: this.links
             });
-            console.log(this.state);
             history.push('/posts')
         })
     };

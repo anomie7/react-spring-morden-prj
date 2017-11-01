@@ -6,35 +6,35 @@ const Home_Content = () => {
         <Grid>
                     <Grid.Row>
                     <Grid.Column width={8}>
-                       <Segment>asdfsadfsdafsda</Segment>
+                       <Segment>test</Segment>
                     </Grid.Column>
                     <Grid.Column width={8}>
-                        <Segment>asdfsadfsdafsda</Segment>
+                        <Segment>test2</Segment>
                     </Grid.Column>
                     </Grid.Row>
 
                     <Grid.Row>
                     <Grid.Column width={8}>
-                        <Segment>asdfsadfsdafsda</Segment>
+                        <Segment>home</Segment>
                     </Grid.Column>
                     <Grid.Column width={8}>
-                        <Segment>asdfsadfsdafsda</Segment>
-                    </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row>
-                    <Grid.Column width={8}>
-                        <Segment>asdfsadfsdafsda</Segment>
-                    </Grid.Column>
-                    <Grid.Column width={8}>
-                        <Segment>asdfsadfsdafsda</Segment>
+                        <Segment>hom</Segment>
                     </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                     <Grid.Column width={8}>
-                        <Segment>asdfsadfsdafsda</Segment>
+                        <Segment>introduction</Segment>
                     </Grid.Column>
                     <Grid.Column width={8}>
-                        <Segment>asdfsadfsdafsda</Segment>
+                        <Segment>hello World</Segment>
+                    </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                    <Grid.Column width={8}>
+                        <Segment>hello world</Segment>
+                    </Grid.Column>
+                    <Grid.Column width={8}>
+                        <Segment>hello world</Segment>
                     </Grid.Column>
                     </Grid.Row>
                 </Grid>
