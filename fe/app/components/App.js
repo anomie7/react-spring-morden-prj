@@ -52,7 +52,7 @@ class App extends React.Component{
     };
 
 
-    loadFromServer(pageSize){
+    loadFromServer(pageSize, func){
         console.log('loadFromServer 시작!')
         follow(client, root, [
             {rel: 'posts', params: {size: pageSize}}]
@@ -83,7 +83,10 @@ class App extends React.Component{
                 links: this.links
             });
             console.log(this.state);
+            //비동기식 처리로 인해서 setState가 되기 전에 페이지 이동이 되는것을 방지함
+            func != undefined ? func() : console.log(func)
         });
+   
     }
 
     _InsertPost(post, history){
@@ -169,7 +172,7 @@ class App extends React.Component{
                 'If-Match' : post.headers.Etag
             }
         }).then(res => {
-            this.loadFromServer(this.state.pageSize);
+            this.loadFromServer(this.state.pageSize, () => history.push('/posts'));
         }, res =>{
             if(res.status.code == 412){
                 alert('DENIED: Unable to update ' + 
@@ -177,9 +180,6 @@ class App extends React.Component{
             }
         })
             console.log('complite udpate1!2');
-            setInterval(function(){
-                history.push('/posts');
-            }, 2000)
     }
 
     
