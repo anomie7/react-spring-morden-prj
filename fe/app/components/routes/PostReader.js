@@ -20,8 +20,7 @@ class PostReader extends React.Component{
     }
 
     updatePost(){
-        this.props.updatePost(this.post, this.postNum);
-        this.history.push('/ueditor');
+        this.props.updatePost(this.post, this.postNum, this.history);
     }
 
     render(){

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import When from 'when';
+import when from 'when';
 import { Container, Segment } from "semantic-ui-react";
 import update from 'react-addons-update';
 import MyMenu from './MyMenu';
@@ -44,6 +44,7 @@ class App extends React.Component{
             links: {},
             attributes: []
         };
+        this.OnNavigate.bind(this);
     }
 
     componentDidMount() {
@@ -52,6 +53,7 @@ class App extends React.Component{
 
 
     loadFromServer(pageSize){
+        console.log('loadFromServer 시작!')
         follow(client, root, [
             {rel: 'posts', params: {size: pageSize}}]
         ).then(postsCollection => {
@@ -72,7 +74,7 @@ class App extends React.Component{
                 })
             );
         }).then(postPromises => {
-            return When.all(postPromises);
+            return when.all(postPromises);
         }).then(posts => {
             this.setState({
                 posts: posts,
@@ -108,7 +110,7 @@ class App extends React.Component{
                 })
             )
         }).then(postPromises => {
-            return When.all(postPromises);
+            return when.all(postPromises);
         }).then(posts => {
             this.setState({
                 posts: posts,
@@ -144,31 +146,46 @@ class App extends React.Component{
         history.goBack();
     }
 
-    _updatePost(post, postNum){
+    _updatePost(post, postNum, history){
         this.setState({
             updatePost: post,
             postNum: postNum
         });
-        console.log(this.state.postNum);
+        console.log(postNum);
+        console.log(post);
+        history.push('/ueditor');
     }
 
-    _modifyPost(post, postNum){
+    _modifyPost(post, link, history){
         console.log(post);
-        console.log(postNum);
-        this.setState({
-            posts: update(
-                this.state.posts,
-                {
-                    [postNum] : {
-                        subject: {$set: post.subject},
-                        writer: {$set: post.writer},
-                        createDate: {$set: post.createDate},
-                        content: {$set: post.content},
-                        category: {$set: post.category}
-                    }
-                }
-            )
-        });
+        console.log(link);
+
+        client({
+            method: 'PUT',
+            entity: post,
+            path: link,
+            headers: {
+                'Content-Type': 'application/json',
+                'If-Match' : post.headers.Etag
+            }
+        }).then(res => {
+            this.loadFromServer(this.state.pageSize);
+        }, res =>{
+            if(res.status.code == 412){
+                alert('DENIED: Unable to update ' + 
+                            link + 'your copy is stale')
+            }
+        })
+            console.log('complite udpate1!2');
+            setInterval(function(){
+                history.push('/posts');
+            }, 2000)
+    }
+
+    
+
+    OnNavigate(){
+        console.log('언제 실행될까?')
     }
 
     render(){

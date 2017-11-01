@@ -28,8 +28,10 @@ class Editor extends React.Component{
 
     handleSubmit(e){
         e.preventDefault();
+        console.log('비동기적인 처리일까요?1');
         this.props.InsertPost(this.state, this.props.history);
-        // this.props.history.push('/posts');
+        console.log('비동기적인 처리일까요?2');
+        console.log('비동기적인 처리일까요?3');
     }
 
     render(){

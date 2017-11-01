@@ -12,18 +12,17 @@ class UpdateEditor extends React.Component{
     constructor(props){
         super(props);        
         this.state = {
-            subject: '',
-            writer: '',
-            createDate: '',
-            content: '',
-            category: ''
+                subject: this.props.post.entity.subject,
+                writer: this.props.post.entity.writer,
+                createDate: this.props.post.entity.createDate,
+                content: this.props.post.entity.content,
+                category: this.props.post.entity.category,
+                headers: this.props.post.headers
         };
     }
 
     componentDidMount() {
-        this.setState(this.props.post);
-        console.log(this.state);
-        
+        this.link = this.props.post.url;
     }
 
     componentWillReceiveProps(nextProps){
@@ -33,13 +32,15 @@ class UpdateEditor extends React.Component{
     handleChange(e, data){
         var nextState = {};
         nextState[data.name] = data.value;
+        console.log(data.name + " " + data.value);
         this.setState(nextState);
         console.log(this.state);
     }
 
-    handleSubmit(){ 
-        this.props.modifyPost(this.state, this.props.postNum);
-        this.props.history.push('/posts');
+    handleSubmit(){
+        console.log('modifyPost!!!');
+        this.props.modifyPost(this.state, this.link, this.props.history);
+        console.log('modifyPost!');
     }
 
     render(){
